@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: breizhcamp-base
-# Recipe:: sysadmins
+# Cookbook Name:: labs-docker
+# Recipe:: default
 #
 # Copyright 2015, BreizhCamp
 #
@@ -17,10 +17,29 @@
 # limitations under the License.
 #
 
-include_recipe 'users::sysadmins'
+include_recipe 'docker'
 
-node.default['authorization']['sudo']['passwordless'] = true
-node.default['authorization']['sudo']['include_sudoers_d'] = true
+directory '/srv/docker/registry' do
+  owner 'root'
+  group 'root'
+  mode '0755'
+  action :create
+end
 
-include_recipe 'sudo'
+cookbook_file '/srv/docker/registry.yml' do
+  owner 'root'
+  group 'root'
+  mode '0644'
+  action :create
+end
+
+docker_container 'registry' do
+  detach true
+  tty true
+  port '5000:5000'
+  env [
+    'DOCKER_REGISTRY_CONFIG=/srv/docker/registry.yml',
+    'SETTINGS_FLAVOR=local']
+  volume '/srv/docker:/srv/docker'
+end
 

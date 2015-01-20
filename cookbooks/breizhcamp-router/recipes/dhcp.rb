@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: breizhcamp-base
-# Recipe:: sysadmins
+# Cookbook Name:: breizhcamp-router
+# Recipe:: dhcp
 #
 # Copyright 2015, BreizhCamp
 #
@@ -17,10 +17,16 @@
 # limitations under the License.
 #
 
-include_recipe 'users::sysadmins'
+node.default[:dhcp][:interfaces] = [ 'br-local' ]
+node.default[:dhcp][:use_bags] = false
+node.default[:dhcp][:options]['domain-name-servers'] = '192.168.16.1'
+node.default[:dhcp][:options]['domain-name'] = 'priv'
 
-node.default['authorization']['sudo']['passwordless'] = true
-node.default['authorization']['sudo']['include_sudoers_d'] = true
-
-include_recipe 'sudo'
+include_recipe 'dhcp::server'
+dhcp_subnet '192.168.16.0' do
+  range '192.168.16.100 192.168.31.200'
+  netmask '255.255.240.0'
+  broadcast '192.168.31.255'
+  routers  [ '192.168.16.1' ]
+end
 

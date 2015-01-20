@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: breizhcamp-base
-# Recipe:: sysadmins
+# Recipe:: tweaks
 #
 # Copyright 2015, BreizhCamp
 #
@@ -16,11 +16,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# fight bufferbloat
+node.default['sysctl']['params']['net']['core']['default_qdisc'] = 'fq_codel'
 
-include_recipe 'users::sysadmins'
-
-node.default['authorization']['sudo']['passwordless'] = true
-node.default['authorization']['sudo']['include_sudoers_d'] = true
-
-include_recipe 'sudo'
+include_recipe 'sysctl::apply'
 

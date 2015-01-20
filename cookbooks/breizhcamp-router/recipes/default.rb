@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: breizhcamp-base
-# Recipe:: sysadmins
+# Cookbook Name:: breizhcamp-router
+# Recipe:: default
 #
 # Copyright 2015, BreizhCamp
 #
@@ -17,10 +17,25 @@
 # limitations under the License.
 #
 
-include_recipe 'users::sysadmins'
+include_recipe 'network_interfaces'
 
-node.default['authorization']['sudo']['passwordless'] = true
-node.default['authorization']['sudo']['include_sudoers_d'] = true
+# refactoring required !!!
+network_interfaces 'eth0' do
+  onboot true
+end
 
-include_recipe 'sudo'
+network_interfaces 'eth1' do
+  onboot true
+end
+
+network_interfaces 'br-local' do
+  onboot true
+  target '192.168.16.1'
+  mask '255.255.240.0'
+  bridge ['eth0', 'eth1']
+end
+
+include_recipe 'breizhcamp-router::dhcp'
+include_recipe 'breizhcamp-router::dns'
+include_recipe 'breizhcamp-router::firewall'
 

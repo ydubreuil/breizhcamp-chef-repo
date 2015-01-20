@@ -1,0 +1,4 @@
+regex ^http://.*archive.ubuntu.com/(ubuntu/(dists|pool)/.*)$  http://localhost/mirrors/archive.ubuntu.com/\1
+regex ^http://security.ubuntu.com/(ubuntu/(dists|pool)/.*)$   http://localhost/mirrors/archive.ubuntu.com/\1
+regex ^http://updates.jenkins-ci.org/download/plugins/(.*)$  http://localhost/mirrors/updates.jenkins-ci.org/plugins/\1
+

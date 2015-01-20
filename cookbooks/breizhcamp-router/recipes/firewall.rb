@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: breizhcamp-base
-# Recipe:: sysadmins
+# Cookbook Name:: breizhcamp-router
+# Recipe:: firewall
 #
 # Copyright 2015, BreizhCamp
 #
@@ -17,10 +17,22 @@
 # limitations under the License.
 #
 
-include_recipe 'users::sysadmins'
 
-node.default['authorization']['sudo']['passwordless'] = true
-node.default['authorization']['sudo']['include_sudoers_d'] = true
+node.default['iptables-ng']['script_ipv6'] = '/etc/iptables/rules.v6.disabled'
 
-include_recipe 'sudo'
+include_recipe 'iptables-ng'
+
+iptables_ng_rule 'masquerade-br-local' do
+  chain 'POSTROUTING'
+  table 'nat'
+  rule  '-s 192.168.16.0/20 ! -o br-local -j MASQUERADE'
+  ip_version 4
+end
+
+iptables_ng_rule 'forward-local' do
+  chain 'FORWARD'
+  table 'filter'
+  rule  '-o br-local -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT'
+  ip_version 4
+end
 

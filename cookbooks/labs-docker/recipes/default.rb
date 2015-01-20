@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: breizhcamp-base
-# Recipe:: sysadmins
+# Cookbook Name:: labs-docker
+# Recipe:: default
 #
 # Copyright 2015, BreizhCamp
 #
@@ -17,10 +17,7 @@
 # limitations under the License.
 #
 
-include_recipe 'users::sysadmins'
-
-node.default['authorization']['sudo']['passwordless'] = true
-node.default['authorization']['sudo']['include_sudoers_d'] = true
-
-include_recipe 'sudo'
+include_recipe 'labs-docker::mirrors'
+include_recipe 'labs-docker::dockerregistry'
+#include_recipe 'labs-docker::artifactory'
 

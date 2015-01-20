@@ -1,6 +1,6 @@
 #
-# Cookbook Name:: breizhcamp-base
-# Recipe:: sysadmins
+# Cookbook Name:: breizhcamp-router
+# Recipe:: dns
 #
 # Copyright 2015, BreizhCamp
 #
@@ -17,10 +17,24 @@
 # limitations under the License.
 #
 
-include_recipe 'users::sysadmins'
+directory '/var/cache/bind/master' do
+  owner 'root'
+  group 'root'
+  mode '0755'
+  action :create
+end
 
-node.default['authorization']['sudo']['passwordless'] = true
-node.default['authorization']['sudo']['include_sudoers_d'] = true
+template '/var/cache/bind/master/db.priv' do
+  source 'db.priv.erb'
+  owner 'root'
+  group 'root'
+  action :create
+  mode '0644'
+end
 
-include_recipe 'sudo'
+# the trick here is to use dnsmasq local DNS configured with DHCP
+node.default['bind']['options'] = [ 'forwarders { 127.0.1.1 ;};' ]
+node.default['bind']['zonetype'] = 'master'
+node.default['bind']['zones']['attribute'] = [ 'priv' ]
+include_recipe 'bind'
 

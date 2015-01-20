@@ -9,12 +9,14 @@ Collection of cookbook used to configure BreizhCamp and side infrastructures
 
 ## install a new node
 
-* git clone this repository
-
-* launch chef.sh
+2 options
+* git clone this repository on the machine and launch chef.sh
 
 	./chef.sh -r 'recipe[apache2]'
 
+* use knife zero to bootstrap as if you were using a chef server
+
+    knife zero bootstrap NODE_NAME_OR_IP --sudo -x admin -r 'role[dockerlab-server]'
 
 ## useful commands
 
