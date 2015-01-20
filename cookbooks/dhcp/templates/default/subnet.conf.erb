@@ -1,0 +1,45 @@
+# File managed by Chef
+
+subnet <%= @subnet %> netmask <%= @netmask%> {
+<% unless @range.empty? -%>
+pool {
+  <% if @peer -%>
+  failover peer "<%= node[:domain] %>";
+  <% end -%>
+  range <%= @range %>;
+}
+<% end -%>  
+<% if @ddns -%>
+  ddns-domainname "<%= @ddns %>";
+<% end -%>
+<% unless @routers.empty? -%>
+  option routers <%= @routers.map {|i| i }.join(",") %>;
+<% end -%>
+  option subnet-mask <%= @netmask %>;
+  option broadcast-address <%= @broadcast %>;
+<% unless @options.empty? -%>
+<%   @options.sort.each do |option| -%>
+  <%= option %>;
+<%   end -%>
+<% end -%>
+
+<% @evals.sort.each do |eval| -%>
+<%= eval %>
+<% end -%>
+
+<% unless @key.empty? -%>
+  key <%= @key['name'] %> {
+    algorithm <%= @key['algorithm'] %>;
+    secret "<%= @key['secret'] %>";
+  };
+<% end -%>
+
+<% unless @zones.empty? -%>
+<% @zones.each do |zone| -%>
+  zone <%= zone['zone'] %> {
+    primary <%= zone['primary'] %>;
+    key <%= zone['key'] %>;
+  }
+<% end -%>
+<% end -%>
+}
