@@ -44,6 +44,11 @@
   ProxyPassReverse /cache/repo.typesafe.com/typesafe/releases http://repo.typesafe.com/typesafe/releases
   CacheEnable disk /cache/repo.typesafe.com/typesafe/releases
 
+  # jenkins
+  ProxyPass /cache/repo.jenkins-ci.org/public http://repo.jenkins-ci.org/public
+  ProxyPassReverse /cache/repo.jenkins-ci.org/public http://repo.jenkins-ci.org/public
+  CacheEnable disk /cache/repo.jenkins-ci.org/public
+
   CacheDirLength 2
   CacheDirLevels 3
 
