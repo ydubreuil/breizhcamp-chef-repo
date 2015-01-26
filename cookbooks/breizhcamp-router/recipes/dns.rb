@@ -32,6 +32,12 @@ template '/var/cache/bind/master/db.priv' do
   mode '0644'
 end
 
+cookbook_file '/etc/default/bind9' do
+  mode 0644
+  action :create
+end
+
+
 # the trick here is to use dnsmasq local DNS configured with DHCP
 node.default['bind']['options'] = [ 'forwarders { 127.0.1.1 ;};' ]
 node.default['bind']['zonetype'] = 'master'

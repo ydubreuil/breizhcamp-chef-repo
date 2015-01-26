@@ -80,6 +80,11 @@ cookbook_file '/srv/mirrors/ubuntu-keyring/trustedkeys.gpg' do
   action :create
 end
 
+cookbook_file '/etc/security/limits.d/squidlimits.conf' do
+  mode 0644
+  action :create
+end
+
 package 'jesred' do
   action :install
 end

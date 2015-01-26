@@ -19,5 +19,8 @@
 # fight bufferbloat
 node.default['sysctl']['params']['net']['core']['default_qdisc'] = 'fq_codel'
 
+# disable ipv6
+node.default['sysctl']['params']['net']['ipv6']['conf']['all']['disable_ipv6'] = 1
+
 include_recipe 'sysctl::apply'
 
