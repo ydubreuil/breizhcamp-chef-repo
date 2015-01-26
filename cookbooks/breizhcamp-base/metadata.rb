@@ -10,4 +10,5 @@ depends          'users'
 depends          'sudo'
 depends          'openssh'
 depends          'sysctl'
+depends          'apt'
 

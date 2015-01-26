@@ -17,9 +17,10 @@
 # limitations under the License.
 #
 
+node.default['apache']['listen_ports'] = ['80','81']
 include_recipe 'apache2'
 
-%w(proxy proxy_http).each do |modulename|
+%w(proxy proxy_http cache cache_disk).each do |modulename|
   apache_module "#{modulename}" do
     enable true
   end
@@ -31,6 +32,14 @@ web_app "mirror" do
   server_name "#{node['hostname'] + '.priv'}"
   docroot '/srv/mirrors/www'
   directory_options [ 'Indexes', 'FollowSymLinks']
+end
+
+# it also contains HTTP reverse proxy for docker registry
+web_app "cache" do
+  template 'cache.conf.erb'
+  server_port 81
+  server_name "#{node['hostname'] + '.priv'}"
+  docroot '/var/www' 
 end
 
 %w(/srv/mirrors/scripts
@@ -45,6 +54,13 @@ end
     action :create
     recursive true
   end
+end
+
+directory "/srv/mirrors/cache" do
+  owner 'www-data'
+  group 'www-data'
+  mode '0755'
+  action :create
 end
 
 remote_file '/srv/mirrors/www/boot2docker/Boot2Docker-1.4.1.pkg' do

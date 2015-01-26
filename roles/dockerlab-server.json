@@ -2,14 +2,6 @@
   "name": "dockerlab-server",
   "chef_type": "role",
   "json_class": "Chef::Role",
-  "default_attributes": {
-    "apache2": {
-      "listen_ports": [
-        "80",
-        "443"
-      ]
-    }
-  },
   "run_list": [
     "recipe[breizhcamp-base]",
     "recipe[breizhcamp-router]",

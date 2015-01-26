@@ -24,3 +24,8 @@ node.default['sysctl']['params']['net']['ipv6']['conf']['all']['disable_ipv6'] =
 
 include_recipe 'sysctl::apply'
 
+include_recipe 'apt'
+
+package 'linux-hwe-generic-trusty' do
+  action :install
+end
